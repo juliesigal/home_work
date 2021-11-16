@@ -1,15 +1,17 @@
+import shelve
+
 class BankAccount:
-    def __init__(self, id, full_name_owner,balance):
+    def __init__(self, id, full_name_owner, balance):
         self.id = id
         self.full_name_owner = full_name_owner
         self.balance = balance
 
     def __add__(self, other):
         if type(other) == int or type(other) == float:
-            return Circle(self.radius + other)
+            return BankAccount(self.balance + other)
         if type(self) != type(other):
-            return Circle(self.radius)
-        return Circle(self.radius + other.radius)
+            return BankAccount(self.balance)
+        return BankAccount(self.balance + other.balance)
 
     def __sub__(self, other):
         if type(other) == int or type(other) == float:
@@ -28,35 +30,48 @@ class BankAccount:
 
     def __eq__(self, other):
         if type(other) == int or type(other) == float:
-            return self.radius == other
+            return self.balance == other.balance
         if type(self) != type(other):
             return False
-        return self.radius == other.radius
+        return self.balance == other.balance
 
     def __gt__(self, other):
         if type(other) == int or type(other) == float:
-            return self.radius > other
+            return self.balance > other.balance
         if type(self) != type(other):
             return False
-        return self.radius > other.radius
+        return self.balance > other.balance
 
     def __repr__(self):
-        return f'Circle({self.radius})'
+        return f'Bank account ({self.id}, {self.full_name_owner}, {self.balance})'
 
     def __str__(self):
-        return f'Circle radius:{self.radius}'
+        return f'Bank account id is: {self.id}, \
+        full name of owner is: {self.full_name_owner} and the balance is: {self.balance}'
 
-_acc1 = BankAccount()
+account1 = BankAccount(1234, 'Moshe Cohen', 2300)
+account2 = BankAccount(1233, 'Julie Smith', 2400)
+
+
+_acc1 = BankAccount(1234, 'Moshe Cohen', 2300)
 _acc1.id = 1234
 _acc1.full_name_owner = 'Moshe Cohen'
 _acc1.balance = 2300
 
-_acc2 = BankAccount()
+_acc2 = BankAccount(1233, 'Julie Smith', 2400)
 _acc2.id = 1233
 _acc2.full_name_owner = 'Julie Sigal'
 _acc2.balance = 2400
 
-_acc3 = BankAccount()
+_acc3 = BankAccount(1232, 'James Bond', 2500)
 _acc3.id = 1232
 _acc3.full_name_owner = 'James Bond'
 _acc3.balance = 2500
+
+shl = shelve.open('bank.db')
+
+shl['_acc1'] = _acc1.__dict__
+_acc1_from_db_dict = shl['moshe']
+_acc1 = Person()
+_acc1.__dict__ = moshe_from_db_dict
+print(_acc1)
